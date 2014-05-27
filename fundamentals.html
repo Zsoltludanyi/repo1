@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Java Fundamentals</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+    @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+    @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+    body { font-family: 'Droid Serif'; }
+    h1, h2, h3 {
+      font-family: 'Yanone Kaffeesatz';
+      font-weight: 400;
+      margin-bottom: 0;
+      margin-top: 10px;
+    }
+    h1 { font-size: 3.5em; }
+    h2 { font-size: 3em; }
+    h3 { font-size: 1.6em; }
+
+    code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;
+        //font-size: 16px;
+      }
+	  
+	tr:nth-of-type(even) {
+		background-color:#F0F0F0;
+	}
+  
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Java Fundamentals
+by Denes Varga
+---
+
+# Agenda
+
+- IDE
+- First Program
+- GoHome
+- Logging basics
+- JUL
+- Log4J
+- SLF4J
+- LogBack
+
+---
+
+# IDE
+
+- Working with source code is a pain in the ass without a professional tool
+- The most famous **I**ntegrated **D**evelopment **E**nvironments:
+  - Eclipse: http://www.eclipse.org
+  - NetBeans: http://netbeans.org
+  - IntelliJ IDEA: http://www.jetbrains.com/idea
+--
+
+- Let's focus on Eclipse!
+  - Open source.
+  - Well supported.
+  - Has many plugins.
+--
+
+- Please Download "Eclipse IDE for Java EE Developers"
+- Extract to anywhere and start it
+
+--
+
+![Eclipse](eclipse1.jpg)
+
+---
+
+# First Program in Eclispe
+
+- File -> New... -> Project...
+- Select "Java Project", Next
+--
+
+- Project name: "Lunch", Finish
+--
+
+- On "src" in tree right click, New... -> Class
+--
+
+- Package: "com.epam.training.lunch"
+- Name: "Lunch"
+- Check: "public static void main(String[] args)", Finish
+--
+
+- Edit main method to display a "Hello World!"
+  - type "syso" then hit Ctrl+Space
+--
+
+- Click on "Run" (round green play button)
+--
+
+- *Voilá!*
+
+---
+
+# GoHome
+
+- In a new class print out how many minutes left till go home
+--
+
+- Introduction of `String.format()`
+--
+
+- Meet with property files
+--
+
+- `PropertyResourceBundle` features
+--
+
+- `MessageFormat` introduction
+--
+
+## Workday
+- Use this property file:
+
+```
+workday-format: u
+workday.Monday : 1
+workday.Tuesday : 2
+workday.Wednesday : 3
+workday.Thursday : 4
+workday.Friday : 5
+
+vacation-format: MM-dd
+vacation.new-year: 01-01
+vacation.march15: 03-15
+#...
+
+extra-vacation-format: yyyy-MM-dd
+extra-vacation.1: 2014-05-02
+#...
+
+extra-workday-format: yyyy-MM-dd
+extra-workday.1: 2014-05-10
+#...
+```
+
+---
+
+# Logging
+
+## History
+ - `System.out` and `System.err`
+--
+
+ - log4j: 1999 by Ceki Gülcü
+--
+
+ - Java Util Logging (JUL): 2002
+--
+
+ - Apache Commons Logging (ACL): 2002 - the first facade
+--
+
+ - Simple Logging Facade for Java (SLF4J): 2005 by Ceki Gülcü
+--
+
+ - LogBack: 2006 by 
+--
+Ceki Gülcü
+
+--
+
+### More about the history
+
+- http://www.javacodegeeks.com/2011/09/java-logging-mess.html
+
+---
+ 
+
+# JUL
+- `java.util.logging`
+  - Reference: http://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html
+  - Usage:  http://docs.oracle.com/javase/7/docs/technotes/guides/logging/overview.html
+  - Levels:
+    - SEVERE (highest value)
+	- WARNING
+	- INFO
+	- CONFIG
+	- FINE
+	- FINER
+	- FINEST (lowest value)
+	- (OFF)
+  - Logging process:
+    - Application calls `Logger`
+	- `Logger` creates a `LogRecord`
+	- `Handler` processes `LogRecord` and optionally could pass it to another `Handler` (like `MemoryHandler`)
+	  - `Logger` and `Handler` implementations could deal with `Level` and `Filter` settings.
+
+### Sample logging.properties file
+```
+handlers = java.util.logging.ConsoleHandler
+.level = INFO
+
+java.util.logging.ConsoleHandler.level = FINE
+java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+
+com.epam.training.level = FINE
+```
+---
+
+# Log4J
+- Reference: http://logging.apache.org/log4j/
+- Usage: http://logging.apache.org/log4j/1.2/manual.html
+- Loggers are in hierarchy and inheritance is working
+  - `Logger.getRootLogger();`
+  - `Logger.getLogger(Class clazz);`
+- Levels:
+  - TRACE
+  - DEBUG
+  - INFO
+  - WARN
+  - ERROR
+  - FATAL
+- Appenders for defining the output
+  - `ConsoleAppender`
+  - `FileAppender`
+  - `NullAppender`
+  - ...
+	  
+### Sample log4j.properties file
+
+```
+log4j.logger.com.epam.training=DEBUG, stdout
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+```
+---
+
+# SLF4J
+- Reference: http://www.slf4j.org/index.html
+- It was the first facade
+- Able to tunel different logging framework into them
+  - Can log alone `slf4j-simple-1.7.5.jar`
+  - Can log with all the well known logging frameworks (log4j, JUL, LogBack)
+  - Has default NOPLoggerFactory - avoid `NoClassDefFoundException`
+- Usage is quite the same as previous ones:
+  
+``` java
+Logger logger = LoggerFactory.getLogger(Wombat.class);
+logger.debug("Temperature set to {}. Old temperature was {}.", t, oldT);
+```
+
+---
+
+# LogBack
+- Reference: http://logback.qos.ch/index.html
+- Intended to correct the log4j issues from the same developer
+- Usually used together with slf4j:
+  - slf4j-api.jar
+  - logback-core.jar
+  - logback-classic.jar
+- Configurable via XML:
+  
+``` xml
+<configuration scan="true" scanPeriod="3 seconds">
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%d{HH:mm:ss.SSS} %-5level %logger{15} - %msg%n</pattern></encoder>
+  </appender>
+
+  <root level="trace">
+    <appender-ref ref="STDOUT" />
+  </root>  
+</configuration>
+```
+
+---
+
+# Bridge everything to logback
+
+- remove all external depencencies: log4j, acl, ...
+- add bridges: XXX-over-slf4j
+- add logback as slf4 implementation
+
+## Bridge Java Util Logging to logback
+
+- can't be removed from the classpath
+- remove the `Handler` (Appender) from the root logger
+- add jul-**to**-slf4j
+- kickstart the bridge
+
+``` java
+SLF4JBridgeHandler.removeHandlersForRootLogger();
+SLF4JBridgeHandler.install();
+```
+
+---
+
+class: center, middle
+# Q & A
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-0.5.9.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>

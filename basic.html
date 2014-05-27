@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Java 7 basics</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+    @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+    @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+    body { font-family: 'Droid Serif'; }
+    h1, h2, h3 {
+      font-family: 'Yanone Kaffeesatz';
+      font-weight: 400;
+      margin-bottom: 0;
+      margin-top: 10px;
+    }
+    h1 { font-size: 3.5em; }
+    h2 { font-size: 3em; }
+    h3 { font-size: 1.6em; }
+
+    code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;
+        //font-size: 16px;
+      }
+	  
+	tr:nth-of-type(even) {
+		background-color:#F0F0F0;
+	}
+  
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Java Basics
+by Denes Varga
+---
+
+# Agenda
+
+1. Setup
+1. Naming Conventions
+1. Separators
+1. Compilation
+1. Packages
+1. Statements
+1. Operators
+1. String
+1. Primitives
+1. Object
+1. Arrays
+1. Enumerations
+1. Methods
+1. Variable Scopes
+1. Constructor
+1. Static Methods
+1. Static Fields
+1. Collections
+1. Inheritance
+1. Annotations
+1. Exceptions
+
+---
+
+# Setup
+
+- Uninstall every JDK and JRE
+- Download 1.7 latest zip (http://www.oracle.com -> Downloads -> Java for Developers -> Java Platform (JDK) 7 latest)
+- Extract to a correct path (no spaces in it)
+- Set JAVA_HOME and PATH environment variable
+
+---
+
+# Naming Conventions
+
+| Element                          | Lettering                                                   | Characteristic                                             | Example             |
+|----------------------------------|-------------------------------------------------------------|------------------------------------------------------------|---------------------|
+| Class name                       | Begins uppercase continues camel case                       | Noun                                                       | `OfficeBuilding`    |
+| Interface name                   | Same as class name                                          | Adjective ending when possible, like "able" or "ible"      | `Paintable`         |
+| Method name                      | Begins lowercase continues camel case                       | Verb                                                       | `prepare`           |
+| Instance & static variable names | Same as method names                                        | Noun                                                       | `color`             |
+| Parameters and local variables   | same as variable names                                      | Single words, acronyms or abbreviations                    | `colorCode`         |
+| Generic Type parameters          | Single uppercase letter                                     | Letter T is recommended                                    | `T`                 |
+| Constant                         | All uppercase letters                                       | Multiple words separated by underscores                    | `BLUE_CODE`         |
+| Enumeration                      | Same as class names; set of object should be like constants | Noun                                                       | `enum WorkNeeded {PAINT_ONLY, RENOVATION_ONLY, PAINT_AND_RENOVATION}` |
+| Package                          | All lowercase letters                                       | Public packages should be reversed domain name of the org. | `com.epam.training` |
+
+---
+
+# Separators
+
+| Symbol   | Description                           | Purpose
+|----------|---------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `( )`    | Parentheses                           | Encloses set of method arguments, encloses cast types, adjust precedence in arithmetic expressions.    |
+| `{ }`    | Curly brackets                        | Encloses code blocks and also initializes arrays.                                                      |
+| `[ ]`    | Brackets                              | Declares arrays and initializes arrays.                                                                |
+| `< >`    | Angle brackets                        | Encloses generics.                                                                                     |
+| `;`      | Semicolon                             | Terminates statements at the end of a line.                                                            |
+| `,`      | Comma                                 | Separates identifiers in variable declarations, separates values, separates expressions in a for loop. |
+| `.`      | Period                                | Delineates package names, selects an object field or method, supports method chaining.                 |
+| `:`      | Colon                                 | Follows loop labels and used in short form of if.                                                      |
+| `' '`    | Single quotes                         | Defines single characters.                                                                             |
+| `" "`    | Double quotes                         | Defines a string of characters.                                                                        |
+| `//`     | Forward slashes                       | Indicates a single line comment.                                                                       |
+| `/* */`  | Forward slashes with asterisks        | Indicates a block comment for multiple lines.                                                          |
+| `/** */` | Forward slashes with double asterisks | Indicates javadoc comments.                                                                            |
+
+---
+
+# Compilation
+
+## Coding
+
+Your first Java code:
+
+### HelloWorld.java
+``` java
+public class HelloWorld{
+
+  public static void main(String[] args){
+    System.out.println("Hello World!");
+  }
+}
+```
+
+--
+## Compiling
+
+```
+javac HelloWorld.java
+```
+
+--
+## Execution
+
+```
+java HelloWorld
+```
+---
+
+# Compilation
+
+## Compilation process:
+  
+- You create `.java` files (sourcecode).
+- Compiler compiles to `.class` files (bytecode). From this point the output is platform independent.
+- Optionally jar can pack the files into a `.jar` file.
+- JVM interprets these bytecode files and does the work.
+  
+---
+
+# Compilation
+
+## Compiler reference
+
+``` java
+javac [options] [sourcefiles] [classes] [@argfiles]
+```
+--
+
+- Important options:
+	- `-d path` define output directory.
+	- `-classpath` OR `-cp` define class path.
+    - `-version` displays version information of the compiler.
+
+--
+
+- Other arguments:
+    - `sourcefiles` should have `.java` extension
+    - `classfiles` should enlist classes without `.class` extension
+    - `@argfiles` used for large number of arguments
+
+---
+
+# Compilation
+
+## Jar
+
+### About Jar
+- Ordinary ZIP file with metadata in `META-INF/MANIFEST.MF` file
+- Created and manipulated by `jar` tool
+
+--
+
+### Main usage
+- Create archive: `jar cf myJar.jar *.class`
+- Update archive: `jar uf myJar.jar MyClass.class`
+- Extract archive: `jar xf myJar.jar`
+- Test archive: `jar tf myJar.jar`
+
+--
+
+### Other useful options
+- `v` for verbose 
+- `f` for input/output file
+- `m` for manifest file 
+- `-C dir` target directory
+
+---
+
+# Compilation
+
+## Execution
+
+- `java [options] myClass [arguments]`
+- `java [options] -jar myJar.jar [arguments]`
+
+--
+
+### Useful options
+- `-cp` or `-classpath` overrides the CLASSPATH environment variable.
+- `-Dkey=value` define or override system variable.
+
+--
+- `-version` display the version information.
+- `-Xms128m` initial memory allocation pool size.
+- `-Xmx1024m` maximum memory allocation pool size.
+
+--
+
+### For reference: http://docs.oracle.com/javase/7/docs/technotes/tools/index.html#basic
+
+---
+
+# Packages
+
+## Packages basics
+
+- Classes should be organized into packages
+- Package structure reflects the directory structure
+- Reverse domain package naming
+- Class coupling
+- System coupling
+- Maintainability
+
+--
+
+## Package statement
+
+- is optional.
+- can occur once in a java file.
+- have to be the first line of the java file.
+- couldn't start with `java.*` and `javax.*` since these are reserved package names.
+
+---
+
+# Packages
+
+## Import statements
+
+- Immediately after package statement.
+- Makes life easier: `new java.math.BigDeciaml(1)` -> `new BigDecimal(1)`
+- `java.lang.*` is automatically imported to every java file.
+- Examples:
+
+### Implicit import
+``` java
+import java.net.*;
+```
+### Explicit import
+``` java
+import java.net.URL;
+```
+
+### Implicit static import
+``` java
+import static java.math.BigDecimal.*;
+```
+
+### Explicit static import
+``` java
+import static java.math.BigDecimal.ONE;
+```
+---
+
+# Statements
+
+## Expression statements
+
+| Statement           | Meaning           |
+|---------------------|-------------------|
+| `variableName = 7;` | Assignment        |
+| `++variableName;`   | Pre-increment     |
+| `--variableName;`   | Pre-decrement     |
+| `variableName++;`   | Post-increment    |
+| `variableName--;`   | Post-decrement    |
+| `methodName();`     | Method invocation |
+| `new MyClass();`    | Object creation   |
+
+---
+
+# Statements
+
+## Conditional statements
+
+- if-then: expression type: `boolean`
+``` java
+if (value == 0) {
+	doSomething();
+}
+```
+- if-then-else: expression type: `boolean`
+``` java
+if (value == 0) {
+	doSomething();
+else if (value >0) {
+    doSomethingElse();
+} else {
+	doFallbackThing();
+}
+```
+- switch: expression types: `char`, `byte`, `short`, `int`, `String` (*from Java 7*), enumeration types
+``` java 
+switch (num) {
+    case 100: doSomething(); break;
+    case 200: doSomethingElse(); break;
+    default: doFallbackThing(); break;
+}
+```
+- short-form if:
+``` java
+int variable = (inputVariable == null) ? 0 : inputVariable;
+```
+
+---
+
+# Statements
+
+## Iteration statements
+
+- for-loop
+``` java
+for (int i=0; i<10; i++){
+    System.out.println(i);
+}
+```
+- foreach-loop
+``` java
+int numbers[] = {0,1,2,3,4,5,6,7,8,9}
+for (int i : numbers){
+    System.out.println(i);
+}
+```
+- while-loop
+``` java
+while (areWeThereNow){
+    doTravel();
+}
+```
+- do-while-loop
+``` java
+do {
+    doTravel();
+} while (areWeThereNow);
+```
+### Please avoid using `break` and `continue`!!!
+
+---
+
+# Statements
+
+## Reserved words
+
+- The most important ones: `abstract`, `break`, `case`, `catch`, `class`, `default`, `do`, `else`, `extends`, `final`, `finally`, `for`, `if`, `implements`, `interface`, `return`, `super`, `switch`, `synchronized`, `this`, `throw`, `throws`, `try`, `void`, `while`
+- The full list: http://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
+
+---
+
+# Operators
+
+## Assignment Operators
+
+| Operator | Meaning                       |
+|----------|-------------------------------|
+| `=`      | Assignment                    |
+| `+=`     | Assignment by addition        |
+| `-=`     | Assignment by subtraction     |
+| `*=`     | Assignment by multiplication  |
+| `/=`     | Assignment by division        |
+| `%=`     | Assignment by modulo division |
+
+--
+
+## Arithmetic Operators
+
+|     |                |
+|-----|----------------|
+| `+` | Addition       |
+| `-` | Subtraction    |
+| `*` | Multiplication |
+| `/` | Division       |
+| `%` | Modulus        |
+
+---
+
+# Operators
+
+## Relational Operators
+
+|      |                       |
+|------|-----------------------|
+| `==` | Equal to              |
+| `!=` | Not equal to          |
+| `<`  | Less than             |
+| `>`  | Greater than          |
+| `<=` | Less than or equal    |
+| `>=` | Greater than or equal |
+
+--
+
+## Logical Operators
+
+``` java
+ boolean ab = doA() | doB();
+ boolean cd = doC() || doD();
+ boolean ef = doE() & doF();
+ boolean gh = doG() && doH();
+ boolean i = !doI();
+```
+
+---
+
+# Primitives
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
+- Special data types in Java.
+- Fixed size memory footprint
+- Primitive types:
+  - `boolean`: can be `true` or `false`, default value: `false`
+  - `char`: a single 16-bit Unicode character 0 to 65,535, default value: `0`
+  - `byte`: small, signed number on 8 bit: -128 to 127, default: `0`
+  - `short`: 16 bit signed number: -32,768 to 32,767 default: `0`
+  - `int`: 32 bit signed number: -2,147,483,648 to 2,147,483,647 default: `0`
+  - `long`: 64 bit signed number: -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, default: `0L`
+  - `float`: 32 bit floating point number from 1.4e<sup>-45</sup> to 3.4e<sup>+38</sup>, default: `0.0f`
+  - `double`: 64 bit floating point number from 5e<sup>-324</sup> to 1.8e<sup>+308</sup>, default: `0.0d`
+- Each has its own wrapper class.
+- *Autoboxing* and *unboxing* works automatically.
+
+---
+
+# String
+
+- Reference: http://docs.oracle.com/javase/6/docs/api/java/lang/String.html
+- No need to use constructor every time.
+- Immutable.
+- Concatenation with `+` or with `concat(String str)` method
+- Equal evaluation: `myString.equals(otherString)`
+- `public static String.format(String format, Object... args)`
+- `StringBuilder` and `StringBuffer` to manipulate String
+- Important method: `Object.toString()`
+
+--
+
+## Exercise: find if a String is a palindrome:
+
+``` java
+public static boolean isItPalindrome(String str){
+//...
+}
+```
+
+- Hint: useful methods for the exercise:
+  - `char charAt(int index)`
+  - `String concat(String str)`
+  - `boolean equals(Object anObject)`
+  - `boolean equalsIgnoreCase(String anotherString)`
+  - `int length()`
+  - `String toLowerCase()`
+  - `String toUpperCase()`
+  - `String trim()`
+- Api: http://docs.oracle.com/javase/7/docs/api/java/lang/String.html
+
+
+---
+
+# Object
+
+- Reference: http://docs.oracle.com/javase/6/docs/api/java/lang/Object.html
+- Root class of all other classes implicitly.
+- Class or instance?
+- Most important methods:
+  - `equals()`
+  - `hashCode()`
+  - `toString()`
+--
+
+- Methods related to low level synchronization:
+  - `wait()`
+  - `notify()`
+  - `notifyAll()  `
+
+---
+
+# Arrays
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html
+- It has a fixed size (can not be extended)
+- Syntax:
+``` java
+int[] scores = new int[2];
+scores[0] = 10;
+scores[1] = scores[0];
+```
+
+--
+
+- In place initialization of multidimensional array:
+``` java
+String[][] names = {
+            {"Mr. ", "Mrs. ", "Ms. "},
+            {"Smith", "Jones"}};
+// Mr. Smith
+System.out.println(names[0][0] + names[1][0]);
+// Ms. Jones
+System.out.println(names[0][2] + names[1][1]);
+```
+---
+
+# Enumerations
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/javaOO/enum.html
+- Introduced in Java 5.0
+- In the background all enums extends the `Enum` class
+- It has a `values()` helper method which returns an array of values
+- You can add methods and constructors to it as well *but not always the best approach*
+- Can be easily used in `switch` formula.
+- Used for predefined set of constants, like days of week:
+``` java
+public enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+    THURSDAY, FRIDAY, SATURDAY 
+}
+```
+
+
+---
+
+# Methods
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/javaOO/methods.html
+- Method declaration: `<access modifier> [abstract] <return type> <method name> (<parameter list>) [throws <exception list>] [{<method body>}]`
+--
+
+- Access modifiers reference: http://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html
+
+Modifier       | Class | Package | Subclass | World
+---------------|-------|---------|----------|-------
+`public`       | Y     | Y       | Y        | Y
+`protected`    | Y     | Y       | Y        | N
+*no modifiers* | Y     | Y       | N        | N
+`private`      | Y     | N       | N        | N
+--
+
+- Abstract methods has no body
+--
+
+- Method names can be overloaded:
+``` java
+public abstract class AbstractDrawer{
+	public abstract void draw(String s);
+	public abstract void draw(Integer i);
+}
+```
+
+--
+
+- Public entry point of a java program: 
+``` java
+public static void main(String[] args){
+}
+```
+
+---
+
+# Variable Scopes
+
+- Local variables
+  - E.g. counter in a loop
+- Method parameters
+  - for pass information to a method
+- Instance variables
+  - for state of an instance
+- Class variables
+  - E.g. count of instances
+
+--
+
+# Constructor
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/javaOO/constructors.html
+- Same name as the class
+- Can have any access modifiers (even you can hide a constructor)
+- Can be overloaded
+- Implicit no-arg constructor exists until you define other constructor(s)
+- You can call super class' constructor: `super(...)`
+- You can use `this` in constructor and all non-static methods/fields.
+
+---
+
+# Static Methods
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/javaOO/classvars.html
+- For actions can be done without instance of the class
+- Can be accessed via instance (*warning*) or via the class.
+
+--
+
+# Static Fields
+
+- For data properties don't belong to an instance
+- Can be accessed via instance (*warning*) or via the class.
+
+--
+
+``` java
+public class BicycleFactory{
+	private static int instanceCounter = 0;
+	public Bicycle createOne(){
+		instanceCounter++;
+		return new Bicycle();
+	}
+	public static int getNumberOfBicyclesMade(){
+		return instanceCounter;
+	}
+}
+```
+
+--
+
+``` java
+Bicycle aBicycle = BicycleFactory.createOne();
+System.out.println("Number of bicycles made: "  + BicycleFactory.getNumberOfBicyclesMade());
+```
+
+---
+
+# Collections
+
+- http://docs.oracle.com/javase/tutorial/collections/TOC.html
+
+![Collections](colls-coreInterfaces.gif)
+
+- Core collection interfaces are generic: `public interface Collection<E>...`
+  - This helps the compiler to verify types in compile time.
+  
+
+| Collection        | Purpose                           | Most commonly used implementations
+|-------------------|-----------------------------------|-------------------------------------
+| `java.util.Set`   | Non-duplicated element collection | `HashSet`, `TreeSet`
+| `java.util.List`  | Ordered collection of elements    | `ArrayList`, `LinkedList`
+| `java.util.Queue` | E.g. for processing list (FIFO)   | `ArrayBlockingQueue`, `LinkedList`
+| `java.util.Deque` | Double ended queue (LIFO / FIFO)  | `LinkedList`, `LinkedBlockingDequeue`
+| `java.util.Map`   | Key-value pairs                   | `HashMap`, `Hashtable`, `ConcurrentHashMap`, `Properties`
+
+---
+
+## Collection
+
+- Traversing Collections:
+  - with a for-each loop
+``` java
+for (Object o : collection)
+		System.out.println(o);
+```
+--
+  - with Iterators
+``` java
+Iterator iterator = myCollection.iterator();
+while (iterator.hasNext()){
+		System.out.println(iterator.next());
+}
+```
+--
+  - with aggregate operators (from Java 8) - *out of scope*
+
+--
+- `Collection.toArray()`: returns with a classic array for older APIs
+
+--
+
+## Set
+
+- Most important methods: `add()`, `remove()`, `contains()`
+- Bulk operations: `containsAll(s2)` (subset), `addAll(s2)` (union), `retainAll(s2)` (intersection), `removeAll(s2)` (difference)
+
+--
+
+## List
+
+- Most important methods: `add()`, `get()`, `indexOf()`
+- `java.util.Collections` utlity class relevant methods: `sort()`, `shuffle()`, `reverse()`, `rotate()`, `swap()`, `replaceAll()`, `fill()`, `copy()`, `binarySearch()`
+
+---
+
+## Queue
+
+- Most important methods:
+
+| Operation &nbsp;&nbsp; | Throws Exception                     | Returns Special Value &nbsp;&nbsp; |
+|------------------|--------------------------------------------|------------------------------------|
+| Insert           | `add(e)` *IllegalStateException*           | `offer(e)` *false*                 |
+| Remove           | `remove()` *NoSuchElementException*        | `poll()` *null*                    |
+| Examine          | `element()` *NoSuchElementException* &nbsp;| `peek()` *null*                    |
+
+- Limited size queues: *bounded* (in `java.util.concurrent` package)
+- `null` can not be an element except in `LinkedList` but be aware of this feature!
+- Special queue: `BlockingQueue` (usually appears in concurrent programming)
+
+--
+
+## Deque
+
+- Double ended queue (quite rarely used)
+- Most important methods:
+
+| Operation &nbsp;&nbsp; | First Element &nbsp;&nbsp;         | Last Element &nbsp;&nbsp;        |
+|------------------------|------------------------------------|----------------------------------|
+| Insert                 | `addFirst(e)` <br> `offerFirst(e)` | `addLast(e)` <br> `offerLAst(e)` |
+| Remove                 | `removeFirst()` <br> `pollFirst()` | `removeLast()` <br> `pollLast()` |
+| Examine                | `getFirst()` <br> `peekFirst()`    | `getLast()` <br> `peekLast()`    |
+
+---
+
+- Useful utility classes:
+  - `java.util.Arrays`: http://docs.oracle.com/javase/6/docs/api/java/util/Arrays.html
+  - `java.util.Collections`: http://docs.oracle.com/javase/6/docs/api/java/util/Collections.html
+--
+
+- For ordering: `Collections.sort` or `Arrays.sort`
+  - `java.lang.Comparable` interface
+  - `java.util.Comparator` interface
+
+--
+
+## Map
+
+- Key-value pairs
+- Most imprtant methods: `put(k,v)`, `get(k)`, `remove(k)`, `containsKey(k)`, `containsValue(v)`, `size()`, `isEmpty()`, `clear()`
+- Views: `Set<K> keySet()`, `Collection<V> values()`, `Set<Map.Entry<K,V>> entrySet()`
+- Typical implementations: `HashMap`, `TreeMap`, `LinkedHashMap`
+
+--
+- Exercise: print out the word frequency
+  - Sample input: "word3 word1 word2 word3 word3 word1"
+  - Expected result like: (in random order)
+```
+word2: 1
+word1: 2
+word3: 3
+```
+--
+- Exercise #2: in alphabetical order
+
+--
+- Exercise #3: in order of appearance
+
+---
+
+# Collections Questions
+
+- Consider the four core interfaces, Set, List, Queue, and Map. For each of the following four assignments, specify which of the four core interfaces is best-suited, and explain how to use it to implement the assignment.
+  1. Whimsical Toys Inc (WTI) needs to record the names of all its employees. Every month, an employee will be chosen at random from these records to receive a free toy.
+  1. WTI has decided that each new product will be named after an employee but only first names will be used, and each name will be used only once. Prepare a list of unique first names.
+  1. WTI decides that it only wants to use the most popular names for its toys. Count up the number of employees who have each first name.
+  1. WTI acquires season tickets for the local lacrosse team, to be shared by employees. Create a waiting list for this popular sport.
+
+---
+
+# Inheritance
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html
+- Every class has a parent - except `Object`.
+- One class have one parent only.
+- Inheritance is multi level in Java.
+- An abstract class may have abstract method(s).
+- Abstract classes couldn't be instantiated.
+- Interface is like a fully abstract class - more or less
+- Interfaces need to be implemented while abstract classes need to be extended.
+- A class can extend one other (abstract or not) class while can implement many interfaces.
+- `final` class cannot be extended. (E.g. `java.lang.String`)
+
+---
+# Inheritance
+
+## What can you do in a subclass?
+
+- Access inherited fields.
+- You can declare fields (even with the same name as in parent - not recommended).
+- Access inherited methods.
+- You can write new instance methods (even with the same signature - that is overriding).
+- You can write new static methods (even with the same signature).
+- You can write new constructor what could override a super one.
+- Access modifiers can allow more but not less access for the overridden method/field.
+- An overridden method can not throw new exception.
+- Recommended to use the `@Override` annotation for safety reasons.
+
+--
+
+#Polymorphism
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html
+- If `RoadBike` extends `Bicycle` then a `RoadBike` instance can be passed wherever a `Bicycle` required.
+- This is the reason why you can not declare more restrictive access level for fields and methods.
+
+---
+
+# Annotations
+
+- Reference: http://docs.oracle.com/javase/tutorial/java/annotations/index.html
+- A form of metadata, about the program.
+--
+
+- Possible use cases:
+  - Information for the compiler.
+  - Compile-time and deployment time processing.
+  - Runtime processing.
+--
+  
+- Format:
+  - `@Override`
+  - `@SuppressWarnings("unchecked")`
+  - `@Author(name = "Denes Varga", date="1/23/2014")`
+--
+  
+- Where can be applied:
+  - Declaration of class
+  - Declaration of fields
+  - Declaration of arguments
+  - Declaration of methods
+  - On other annotations
+  - *Java 8 extends this list*
+
+---
+
+# Annotations
+
+## Most typical annotations in J2SE API
+
+- `@Deprecated`
+- `@Override`
+- `@SuppressWarning`
+--
+
+### You can create your own annotations: http://docs.oracle.com/javase/tutorial/java/annotations/declaring.html
+
+---
+
+# Exceptions
+
+- Reference: http://docs.oracle.com/javase/tutorial/essential/exceptions/
+- "An event that occurs during the execution of a program that disrupts the normal flow of instructions."
+- Kind of exceptions:
+  - Checked exceptions: derived from `java.lang.Exception`
+  - Unchecked Exceptions: derived from `java.land.RuntimeException`
+  - Errors: derived from `java.lang.Error`
+--
+  
+- Class hierarchy:
+  - `java.lang.Object`
+    - *`java.lang.Throwable`*
+	  - `java.lang.Error` (e.g. `OutOfMemoryError`)
+	  - `java.lang.Exception` (e.g. `FileNotFoundException`)
+	    - `java.lang.RuntimeException` (e.g. `NullPointerException`)
+
+--
+
+## What you can do with an Exception
+
+- "Catch or Specify"
+  - Checked exceptions: **must** be caught or specified.
+  - Unchecked exceptions: **could be** caught or specified.
+  - Error: **shouldn't be** handled - cannot really be handled in programs.
+
+---
+
+# Exceptions
+
+- Catch:
+``` java
+public long countCharacters(String filename){
+	long result = 0;
+	FileReader reader = null;
+	try {
+		reader = new FileReader(filename);
+		//...
+	} catch (FileNotFoundException e) {
+		System.err.println("File not found!");
+	} catch (IOException e){
+		e.printStackTrace();
+	} finally {
+		try{
+			if (reader != null){
+				reader.close();
+			}
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	return result;
+}
+```
+- *Form Java SE 7 you can write multi-catch:* `catch (FileNotFoundException|IOException e)`
+--
+
+- Specify:
+``` java
+public long countCharacters(String filename) throws FileNotFoundException, IOException{
+	//same code without try-catch-finally blocks
+}
+```
+
+---
+
+# Exceptions
+
+- try-with-resources: *available form Java 7*
+``` java
+public long countCharacters(String filename) {
+	long result = 0;
+	try(FileReader reader = new FileReader(filename)) {
+		//...
+	} catch (IOException e){
+		e.printStackTrace();
+	}
+	return result;
+}
+```
+  - In here you can declare more resources in `try` separated with semicolon.
+  - `reader` will be closed even in case of exception occurred inside the try block - that will be suppressed without catch block.
+  - In case of exception occurs in close (`java.lang.AutoCloseable`) then that will be thrown.
+
+---
+
+# Java IO
+
+- Oralce tutorial: http://docs.oracle.com/javase/tutorial/essential/io/
+
+--
+
+## I/O Streams:
+  - Byte Streams:
+    - `InputStream` (e.g. `FileInputStream`)
+	- `OutpurStream` (e.g. `FileOutputStream`)
+--
+
+  - Character Streams:
+    - `Reader` (e.g. `FileReader`)
+	- `Writer` (e.g. `FileWriter`)
+--
+
+  - Buffered Streams:
+    - `BufferedInputStream`
+	- `BufferedOutputStream`
+	- `BufferedReader`
+	- `BufferedWriter`
+
+---
+
+## File I/O  (NIO2)
+
+- Prior Java 7 there was only `java.io.*` after Java 7 `java.nio.file.*` arrived.
+- `java.nio.file.Path`: the new interface for all file system objects. Immutable.
+- `java.nio.file.Paths`: a utility class with `get(String first, String... more)` and `get(URI uri)` methods:
+
+```java
+// Microsoft Windows syntax
+Path path = Paths.get("C:\\home\\joe\\foo");
+
+// Solaris syntax
+Path path = Paths.get("/home/joe/foo");
+```
+
+  - `Path` has many useful method for path retrieval, like:
+
+| Method <br>Invoked | Returns in <br>the Solaris OS &nbsp;&nbsp;&nbsp; | Returns in <br>Microsoft Windows &nbsp;&nbsp; |
+|--------------------|--------------------------------------------------|-----------------------------------------------|
+| `toString()`       | /home/joe/foo                                    | C:\\home\\joe\\foo                            |
+| `getFileName()`    | foo                                              | foo                                           |
+| `getName(0)`       | home                                             | home                                          |
+| `getNameCount()`   | 3                                                | 3                                             |
+| `subpath(2)`       | home/joe                                         | home\\joe                                     |
+| `getParent()`      | /home/joe                                        | \\home\\joe                                   |
+| `getRoot()`        | /                                                | C:\\                                          |
+
+--
+- `java.nio.file.Files`: another useful utility class for file operations like
+  - `copy()`, `createDirectory()`, `delete()`,`exists()`, `move()`, `size()`, `walkFileTree()`, etc.
+
+---
+
+## Reading & Writing Files
+
+![File I/O methods](io-fileiomethods.gif)
+
+- Reading/writing small files:
+```java
+Path file = ...;
+byte[] fileArray;
+fileArray = Files.readAllBytes(file);
+```
+```java
+Path file = ...;
+byte[] buf = ...;
+Files.write(file, buf);
+```
+
+---
+
+## Reading & Writing Files
+
+![File I/O methods](io-fileiomethods.gif)
+
+- Buffered I/O Methods:
+```java
+try (BufferedReader reader = Files.newBufferedReader(file, Charset.forName("US-ASCII"))) {
+    String line = null;
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException x) {
+    System.err.format("IOException: %s%n", x);
+}
+```
+```java
+String s = ...;
+try (BufferedWriter writer = Files.newBufferedWriter(file, Charset.forName("US-ASCII"))) {
+    writer.write(s, 0, s.length());
+} catch (IOException x) {
+    System.err.format("IOException: %s%n", x);
+}
+```
+---
+
+## Reading & Writing Files
+
+- Unbuffered streams
+
+```java
+Path file = ...;
+try (InputStream in = Files.newInputStream(file);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+    String line = null;
+    while ((line = reader.readLine()) != null) {
+        System.out.println(line);
+    }
+} catch (IOException x) {
+    System.err.println(x);
+}
+```
+```java
+import static java.nio.file.StandardOpenOption.*;
+
+// Convert the string to a byte array.
+String s = ...;
+byte data[] = s.getBytes();
+
+try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(CREATE, APPEND))) {
+//...
+    out.write(data, 0, data.length);
+} catch (IOException x) {
+    System.err.println(x);
+}
+```
+
+---
+
+## Reading & Writing Files
+
+- Channel I/O
+
+```java
+// Defaults to READ
+try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
+    ByteBuffer buf = ByteBuffer.allocate(10);
+	//Important to set up the desired encoding:
+    String encoding = System.getProperty("file.encoding");
+    while (sbc.read(buf) > 0) {
+        buf.rewind();
+        System.out.print(Charset.forName(encoding).decode(buf));
+        buf.flip();
+    }
+} catch (IOException x) {
+    System.out.println("caught exception: " + x);
+}
+```
+```java
+import static java.nio.file.StandardCopyOption.*;
+
+// Create the set of options for appending to the file.
+Set<OpenOptions> options = new HashSet<OpenOption>();
+options.add(APPEND);
+options.add(CREATE);
+// Create the custom permissions attribute.
+Set<PosixFilePermission> perms = PosixFilePermissions.fromString("rw-r------");
+FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(perms);
+// Convert the string to a ByteBuffer.
+String s = ...;
+byte data[] = s.getBytes();
+ByteBuffer bb = ByteBuffer.wrap(data);
+try (SeekableByteChannel sbc = Files.newByteChannel(file, options, attr)) {
+    sbc.write(bb);
+} catch (IOException x) {
+    System.out.println("exception thrown: " + x);
+}```
+
+---
+
+- More about I/O: http://docs.oracle.com/javase/tutorial/essential/io/
+
+---
+
+class: center, middle
+# Q & A
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-0.5.9.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
